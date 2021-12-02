@@ -21,7 +21,7 @@ public class StackOverflowLogin {
         }
 
         @Test
-        public void route47Test() throws InterruptedException, IOException, URISyntaxException {
+        public void stackOverflowLogin() throws InterruptedException, IOException, URISyntaxException {
             driver.get(URL);
 
             //кнопка log in

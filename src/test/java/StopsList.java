@@ -1,59 +1,47 @@
-import com.google.common.collect.Lists;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import ru.vyatsu.selenium.CDS;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 public class StopsList {
-    private static WebDriver driver;
-    private static final String URL = "https://m.cdsvyatka.com/";
-
-    @Before
-    public void setup() {
-        System.setProperty("webdriver.chrome.driver", getClass().getResource("chromedriver.exe").getPath());
-        driver = new ChromeDriver();
-    }
 
     @Test
-    public void route47Test() throws IOException {
-        driver.get(URL);
+    public void route47BusTest() throws IOException {
+        CDS cdsStops = new CDS();
+        List<String> stopNames = cdsStops.getStopsList(1047);
 
-        //выбор 47 маршрута
-        driver.findElements(
-                By.xpath("//option[@value='1047']"))
-                .get(1)
-                .click();
-
-        //перейти на страницу 47 маршрута
-        driver.findElement(
-                By.xpath("//input[@onclick='marsh_stops.php']"))
-                .click();
-
-        //получение списка остановок
-        List<String> stops = Lists.transform(
-                driver.findElements(
-                By.xpath("//a")),
-                WebElement::getText);
-        stops.remove(stops.size() - 1);
-
-        try (InputStream is = getClass().getResourceAsStream("stops.txt")) {
-            Assert.assertArrayEquals(String.join("\r\n", stops)
+        try (InputStream is = getClass().getResourceAsStream("stops47.txt")) {
+            Assert.assertArrayEquals(String.join("\r\n", stopNames)
                     .getBytes(),
                     is.readAllBytes());
         }
     }
 
-    @After
-    public void quit() {
-        driver.quit();
+    @Test
+    public void route23BusTest() throws IOException {
+        CDS cdsStops = new CDS();
+        List<String> stopNames = cdsStops.getStopsList(1023);
+
+        try (InputStream is = getClass().getResourceAsStream("stops23.txt")) {
+            Assert.assertArrayEquals(String.join("\r\n", stopNames)
+                            .getBytes(),
+                    is.readAllBytes());
+        }
+    }
+
+    @Test
+    public void route8TrolleybusTest() throws IOException {
+        CDS cdsStops = new CDS();
+        List<String> stopNames = cdsStops.getStopsList(50080);
+
+        try (InputStream is = getClass().getResourceAsStream("stops8.txt")) {
+            Assert.assertArrayEquals(String.join("\r\n", stopNames)
+                            .getBytes(),
+                    is.readAllBytes());
+        }
     }
 
 }
